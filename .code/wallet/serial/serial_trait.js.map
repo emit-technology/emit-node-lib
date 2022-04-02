@@ -1,0 +1,1 @@
+{"version":3,"file":"serial_trait.js","sourceRoot":"","sources":["../../../src/wallet/serial/serial_trait.ts"],"names":[],"mappings":"","sourcesContent":["interface SerialTrait {\n  serial: () => Buffer;\n}\n\nexport default SerialTrait;\n"]}

@@ -12,7 +12,8 @@ export function getPublicKeyBs58(privateKey: Buffer): string {
   const pk = privateKey.slice(0, 32);
 
   const pb = ED_BASE.multiply(toScalar(pk));
-  const pubKey = Buffer.from(pb.toRistrettoBytes());
+  // const pubKey = Buffer.from(pb.toRistrettoBytes());
+  const pubKey = pb.toRawBytes();
 
   const prefix = Buffer.from(ADDRESS_BYTES_PREFIX, "hex");
   const h0 = blake2b(EMIT_ADDR_BS_H0, Buffer.concat([prefix, pubKey]));
@@ -31,7 +32,7 @@ export function getPublicKeyBs58(privateKey: Buffer): string {
 
 export function getPublicKey(privateKey: Buffer): Buffer {
   const sk = toScalar(privateKey.slice(0, 32));
-  const pubKey = ED_BASE.multiply(sk).toRistrettoBytes();
+  const pubKey = ED_BASE.multiply(sk).toRawBytes();
   const buf = Buffer.alloc(32, 0);
   buf.fill(pubKey, 0, pubKey.length);
   return buf;

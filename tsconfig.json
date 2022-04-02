@@ -1,27 +1,21 @@
 {
   "compilerOptions": {
-    "sourceMap": true,
     "target": "es2020",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "es2020"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
     "module": "es2020",
+    "rootDir": "src",
+    "outDir": ".code",
+    "newLine": "LF",
+    "lib": ["dom", "es2020"],
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "types": [
-      "node"
-    ],
-    "typeRoots": ["./node_modules/@types"]
-  }
+    "importHelpers": false,
+    "declaration": true,
+    "pretty": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "noUnusedLocals": true,
+    "strict": true,
+    "strictNullChecks": true
+  },
+  "include": ["src", "decs.d.ts"],
+  "exclude": ["node_modules", "umd", "es", "lib"]
 }

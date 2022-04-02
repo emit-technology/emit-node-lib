@@ -1,4 +1,4 @@
-import * as ed from "noble-ed25519";
+import * as ed from "@noble/ed25519";
 import { Block, PrepareBlock, Sign } from "./types";
 import { randomBytes } from "crypto";
 import { ED_BASE } from "./serial/constants";
@@ -55,14 +55,15 @@ export function signPrepareBlock(h: string, privateKey: Buffer): Sign {
   const r = toScalar(randomBytes(32));
   const sk = toScalar(privateKey.slice(0, 32));
   const R = ED_BASE.multiply(r);
-  const concatBuf = Buffer.concat([m, Buffer.from(R.toRistrettoBytes())]);
+
+  const concatBuf = Buffer.concat([m, R.toRawBytes()]);
   let hash = blake2b("EMIT-SIGN", concatBuf);
   const e = toScalar(hash.slice(0, 32));
   const s = new BN(mod(mod(sk * e) + r)).toArrayLike(Buffer, "le");
   const sBuf = Buffer.alloc(32, 0);
   sBuf.fill(s, 0, s.length);
   return {
-    r: Buffer.from(R.toRistrettoBytes()).toString("hex"),
+    r:  R.toHex(),
     s: sBuf.toString("hex"),
   };
 }
