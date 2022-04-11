@@ -39,7 +39,6 @@ export function fromAddressBytes(addr) {
     var h1_r = h1.slice(0, 32);
     var left = Buffer.from(data.slice(33));
     var right = h1_r.slice(0, 3);
-    console.log(left, right);
     if (left.toString('hex') != right.toString('hex')) {
         throw new Error("the address bytes sum-check failed");
     }

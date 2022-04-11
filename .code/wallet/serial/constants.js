@@ -6,6 +6,11 @@ export var ADDRESS_BYTES_LEN = 36;
 export var ADDRESS_BYTES_PREFIX = "1e";
 export var EMIT_ADDR_BS_H0 = "EM_ADDR_BS_H0";
 export var EMIT_ADDR_BS_H1 = "EM_ADDR_BS_H1";
-// export const ED_BASE = ed.RistrettoPoint.fromHex("e2f2ae0a6abc4e71a884a961c500515f58e30b6aa582dd8db6a65945e08d2d76");
-export var ED_BASE = ed.fromAffine().ExtendedPoint.fromRistrettoBytes(Buffer.from("e2f2ae0a6abc4e71a884a961c500515f58e30b6aa582dd8db6a65945e08d2d76", "hex"));
+export var ED_BASE = ed.RistrettoPoint.fromHex("e2f2ae0a6abc4e71a884a961c500515f58e30b6aa582dd8db6a65945e08d2d76");
+// export const ED_BASE = ed.fromAffine().ExtendedPoint.fromRistrettoBytes(
+//   Buffer.from(
+//     "e2f2ae0a6abc4e71a884a961c500515f58e30b6aa582dd8db6a65945e08d2d76",
+//     "hex"
+//   )
+// );
 //# sourceMappingURL=constants.js.map

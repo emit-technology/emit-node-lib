@@ -1,5 +1,5 @@
 import * as ed from "@noble/ed25519";
-// import { randomBytes } from "crypto";
+import { randomBytes } from "crypto";
 import { ED_BASE } from "./serial/constants";
 import { fromAddressBytes } from "./address";
 import BlockSerial from "./serial/block";
@@ -43,13 +43,12 @@ export function mod(a, b) {
 }
 export function signPrepareBlock(h, privateKey) {
     var m = Buffer.from(h, "hex");
-    var r = toScalar(Buffer.from("4acf74881b23d22edc471e14a9e2acc6c9712bc105b1fd922b810672052c9a02", "hex"));
+    var r = toScalar(randomBytes(32));
     var R = ED_BASE.multiply(r);
     var sk = toScalar(privateKey.slice(0, 32));
     var concatBuf = Buffer.concat([m, R.toRawBytes()]);
     var hash = blake2bHash("EMIT-SIGN", concatBuf);
     var e = toScalar(hash.slice(0, 32));
-    console.log("sign e:", e);
     var s = new BN(mod(mod(sk * e) + r)).toArrayLike(Buffer, "le");
     var sBuf = Buffer.alloc(32, 0);
     sBuf.fill(s, 0, s.length);
