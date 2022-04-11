@@ -1,0 +1,1 @@
+{"version":3,"file":"hash.js","sourceRoot":"","sources":["../../../src/wallet/crypto/hash.ts"],"names":[],"mappings":"AAAA,IAAM,MAAM,GACZ,AADc,CAAA","sourcesContent":["const blake2 = \nexport interface Hash{\n    hash: string;\n}"]}

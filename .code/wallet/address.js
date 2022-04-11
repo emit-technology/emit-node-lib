@@ -1,5 +1,5 @@
 import { ADDRESS_BYTES_LEN, ADDRESS_BYTES_PREFIX, ED_BASE, EMIT_ADDR_BS_H0, EMIT_ADDR_BS_H1, } from "./serial";
-import { blake2b, toScalar } from "./sign";
+import { blake2bHash, toScalar } from "./sign";
 var bs58 = require("bs58");
 export function getPublicKeyBs58(privateKey) {
     var pk = privateKey.slice(0, 32);
@@ -7,10 +7,10 @@ export function getPublicKeyBs58(privateKey) {
     // const pubKey = Buffer.from(pb.toRistrettoBytes());
     var pubKey = pb.toRawBytes();
     var prefix = Buffer.from(ADDRESS_BYTES_PREFIX, "hex");
-    var h0 = blake2b(EMIT_ADDR_BS_H0, Buffer.concat([prefix, pubKey]));
+    var h0 = blake2bHash(EMIT_ADDR_BS_H0, Buffer.concat([prefix, pubKey]));
     var h0_r = Buffer.alloc(32, 0);
     h0_r.fill(h0, 0, h0.length > 32 ? 32 : h0.length);
-    var h1 = blake2b(EMIT_ADDR_BS_H1, Buffer.concat([h0_r, pubKey]));
+    var h1 = blake2bHash(EMIT_ADDR_BS_H1, Buffer.concat([h0_r, pubKey]));
     var h1_r = Buffer.alloc(32, 0);
     h1_r.fill(h1, 0, h1.length > 32 ? 32 : h1.length);
     var r = Buffer.alloc(ADDRESS_BYTES_LEN, 0);
@@ -33,11 +33,14 @@ export function fromAddressBytes(addr) {
     if (data[0] != 0x1e) {
         throw new Error("the address prefix is invalid");
     }
-    var h0 = blake2b(EMIT_ADDR_BS_H0, data.slice(0, 33));
+    var h0 = blake2bHash(EMIT_ADDR_BS_H0, data.slice(0, 33));
     var h0_r = h0.slice(0, 32);
-    var h1 = blake2b(EMIT_ADDR_BS_H1, Buffer.concat([h0_r, data.slice(1, 33)]));
+    var h1 = blake2bHash(EMIT_ADDR_BS_H1, Buffer.concat([h0_r, data.slice(1, 33)]));
     var h1_r = h1.slice(0, 32);
-    if (data.slice(33).toString("hex") != h1_r.slice(0, 3).toString("hex")) {
+    var left = Buffer.from(data.slice(33));
+    var right = h1_r.slice(0, 3);
+    console.log(left, right);
+    if (left.toString('hex') != right.toString('hex')) {
         throw new Error("the address bytes sum-check failed");
     }
     return data.slice(1, 33);

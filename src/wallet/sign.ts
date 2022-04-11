@@ -8,7 +8,7 @@ import BlockSerial from "./serial/block";
 const BN = require("bn.js");
 const b2b = require("blake2b");
 
-export function blake2b(personal: string, data: Buffer): Buffer {
+export function blake2bHash(personal: string, data: Buffer): Buffer {
   const p = Buffer.alloc(16, 0);
   p.fill(personal, 0, personal.length);
   const hash = b2b(64, null, null, p);
@@ -22,20 +22,18 @@ export function prepareBlockToHash(prepareBlock: PrepareBlock): string {
   const addrBuf = fromAddressBytes(prepareBlock.address);
   const blkHashBuf = Buffer.from(blockToHash(prepareBlock.blk), "hex");
   const bufConcat = Buffer.concat([addrBuf, blkHashBuf]);
-  console.log(bufConcat, "bufConcat buf");
-  const buf = blake2b(PREPARE_BLOCK_PERSONAL, bufConcat);
-  console.log(buf, "prepare buf");
+  const buf = blake2bHash(PREPARE_BLOCK_PERSONAL, bufConcat);
   return buf.slice(0, 32).toString("hex");
 }
 
 export function blockToHash(block: Block) {
   const BLOCK_HASH_PERSONAL = "EMIT-BLOCK-HASH";
-  const buf = blake2b(BLOCK_HASH_PERSONAL, new BlockSerial(block).serial());
+  const buf = blake2bHash(BLOCK_HASH_PERSONAL, new BlockSerial(block).serial());
   return buf.slice(0, 32).toString("hex");
 }
 
-export function toScalar(privateBytes: Uint8Array): bigint {
-  return mod(bytesToNumberLE(privateBytes), ed.CURVE.n);
+export function toScalar(bytes: Uint8Array): bigint {
+  return mod(bytesToNumberLE(bytes), ed.CURVE.n);
 }
 
 export function bytesToNumberLE(uint8a: Uint8Array): bigint {
@@ -45,7 +43,7 @@ export function bytesToNumberLE(uint8a: Uint8Array): bigint {
   }
   return value;
 }
-function mod(a: bigint, b: bigint = ed.CURVE.n) {
+export function mod(a: bigint, b: bigint = ed.CURVE.n) {
   const res = a % b;
   return res >= BigInt(0) ? res : b + res;
 }
@@ -53,12 +51,14 @@ function mod(a: bigint, b: bigint = ed.CURVE.n) {
 export function signPrepareBlock(h: string, privateKey: Buffer): Sign {
   const m = Buffer.from(h, "hex");
   const r = toScalar(randomBytes(32));
-  const sk = toScalar(privateKey.slice(0, 32));
+
   const R = ED_BASE.multiply(r);
+  const sk = toScalar(privateKey.slice(0, 32));
 
   const concatBuf = Buffer.concat([m, R.toRawBytes()]);
-  let hash = blake2b("EMIT-SIGN", concatBuf);
+  let hash = blake2bHash("EMIT-SIGN", concatBuf);
   const e = toScalar(hash.slice(0, 32));
+
   const s = new BN(mod(mod(sk * e) + r)).toArrayLike(Buffer, "le");
   const sBuf = Buffer.alloc(32, 0);
   sBuf.fill(s, 0, s.length);

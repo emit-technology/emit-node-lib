@@ -1,0 +1,1 @@
+{"version":3,"file":"crypto.js","sourceRoot":"","sources":["../../../src/wallet/types/crypto.ts"],"names":[],"mappings":"","sourcesContent":["export interface Signature {\n    s: string,\n    R: string,\n}\n\nexport interface SignEL {\n    r: string\n    s: string\n    v: string\n}"]}
