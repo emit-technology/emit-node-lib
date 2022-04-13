@@ -49,11 +49,21 @@ export interface Sign {
 	r: string;
 	s: string;
 }
-export declare function blake2b(personal: string, data: Buffer): Buffer;
+export interface Signature {
+	s: bigint;
+	R: ed.RistrettoPoint;
+}
+export interface SignEL {
+	r: string;
+	s: string;
+	v: string;
+}
+export declare function blake2bHash(personal: string, data: Buffer): Buffer;
 export declare function prepareBlockToHash(prepareBlock: PrepareBlock): string;
 export declare function blockToHash(block: Block): string;
-export declare function toScalar(privateBytes: Uint8Array): bigint;
+export declare function toScalar(bytes: Uint8Array): bigint;
 export declare function bytesToNumberLE(uint8a: Uint8Array): bigint;
+export declare function mod(a: bigint, b?: bigint): bigint;
 export declare function signPrepareBlock(h: string, privateKey: Buffer): Sign;
 export interface MsgWithSign<T> {
 	data: T;
@@ -70,6 +80,11 @@ export declare const ADDRESS_BYTES_PREFIX = "1e";
 export declare const EMIT_ADDR_BS_H0 = "EM_ADDR_BS_H0";
 export declare const EMIT_ADDR_BS_H1 = "EM_ADDR_BS_H1";
 export declare const ED_BASE: ed.RistrettoPoint;
+export declare const ecsign: (m: string, privateKey: Buffer) => SignEL;
+export declare const ecrecover: (signEL: SignEL, h: string) => string;
+export declare const verify: (m: Buffer, sig: Signature, publicKey: Buffer) => boolean;
+export declare const personalSign: (privateKey: Buffer, msgParams: string) => SignEL;
+export declare const recoverPersonalSignature: (sig: SignEL, msgHex: string) => string;
 
 export as namespace emitLib;
 

@@ -55,7 +55,7 @@ export function signPrepareBlock(h: string, privateKey: Buffer): Sign {
   const R = ED_BASE.multiply(r);
   const sk = toScalar(privateKey.slice(0, 32));
 
-  const concatBuf = Buffer.concat([m, R.toRawBytes()]);
+  const concatBuf = Buffer.concat([m, Buffer.from(R.toRawBytes())]);
   let hash = blake2bHash("EMIT-SIGN", concatBuf);
   const e = toScalar(hash.slice(0, 32));
 

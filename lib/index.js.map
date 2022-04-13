@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;AAAA,mDAAiC;AACjC,gDAA8B;AAC9B,wDAAqC;AACrC,kDAA+B","sourcesContent":["export * from \"./wallet/address\";\nexport * from \"./wallet/sign\";\nexport * from \"./wallet/serial/index\"\nexport * from \"./wallet/types/\""]}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;AAAA,2CAAwB","sourcesContent":["export * from './wallet'"]}

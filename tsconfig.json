@@ -14,7 +14,8 @@
     "inlineSources": true,
     "noUnusedLocals": true,
     "strict": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "esModuleInterop": true
   },
   "include": ["src", "decs.d.ts"],
   "exclude": ["node_modules", "umd", "es", "lib"]

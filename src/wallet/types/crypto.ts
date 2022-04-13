@@ -1,6 +1,8 @@
+import * as ed from "@noble/ed25519";
+
 export interface Signature {
-    s: string,
-    R: string,
+    s: bigint;
+    R: ed.RistrettoPoint;
 }
 
 export interface SignEL {

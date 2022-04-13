@@ -46,7 +46,7 @@ export function signPrepareBlock(h, privateKey) {
     var r = toScalar(randomBytes(32));
     var R = ED_BASE.multiply(r);
     var sk = toScalar(privateKey.slice(0, 32));
-    var concatBuf = Buffer.concat([m, R.toRawBytes()]);
+    var concatBuf = Buffer.concat([m, Buffer.from(R.toRawBytes())]);
     var hash = blake2bHash("EMIT-SIGN", concatBuf);
     var e = toScalar(hash.slice(0, 32));
     var s = new BN(mod(mod(sk * e) + r)).toArrayLike(Buffer, "le");

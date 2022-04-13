@@ -2,7 +2,8 @@ import { blake2bHash, signPrepareBlock, toScalar } from "../sign";
 import { fromAddressBytes, getPublicKeyBs58 } from "../address";
 import { ED_BASE } from "../serial";
 import * as ed from "@noble/ed25519";
-import { toBuffer } from "../utils";
+import * as ethUtil from 'ethereumjs-util';
+import { toBuffer } from "ethereumjs-util";
 var BN = require('bn.js');
 export var ecsign = function (m, privateKey) {
     var sign = signPrepareBlock(m, privateKey);
@@ -20,7 +21,7 @@ export var ecrecover = function (signEL, h) {
         R: R
     };
     var pb = fromAddressBytes(signEL.v);
-    var m = Buffer.from(h, "hex");
+    var m = toBuffer(h);
     if (verify(m, sig, pb)) {
         return signEL.v;
     }
@@ -29,19 +30,19 @@ export var ecrecover = function (signEL, h) {
 export var verify = function (m, sig, publicKey) {
     var left = ED_BASE.multiply(sig.s);
     var pkHex = new BN(publicKey).toString("hex");
-    var concatBuf = Buffer.concat([m, sig.R.toRawBytes()]);
+    var concatBuf = Buffer.concat([m, Buffer.from(sig.R.toRawBytes())]);
     var hash = blake2bHash("EMIT-SIGN", concatBuf);
     var e = toScalar(hash.slice(0, 32));
     var right = ed.RistrettoPoint.fromHex(pkHex).multiply(e).add(sig.R); //;new BN(mod(mod(toScalar() * e) + sig.R)).toArrayLike(Buffer, "le");
     return left.equals(right);
 };
 export var personalSign = function (privateKey, msgParams) {
-    ecsign("");
+    var msgBuf = ethUtil.toBuffer(msgParams);
+    var msgHash = ethUtil.hashPersonalMessage(msgBuf);
+    var str = msgHash.toString("hex");
+    return ecsign(str, privateKey);
 };
-export var recoverPersonalSignature = function (sig) {
-};
-export var hashPersonalMessage = function (message) {
-    var prefix = toBuffer('\x19Ethereum Signed Message:\n' + message.length.toString());
-    return exports.keccak(Buffer.concat([prefix, message]));
+export var recoverPersonalSignature = function (sig, msgHex) {
+    return ecrecover(sig, msgHex);
 };
 //# sourceMappingURL=sign.js.map

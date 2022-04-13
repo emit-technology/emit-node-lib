@@ -1,4 +1,4 @@
-import {SignEL} from "../types/crypto";
+import {Signature, SignEL} from "../types";
 import {blake2bHash, signPrepareBlock, toScalar} from "../sign";
 import {fromAddressBytes, getPublicKeyBs58} from "../address";
 import {ED_BASE} from "../serial";
@@ -33,15 +33,11 @@ export const ecrecover = (signEL:SignEL,h:string):string => {
    return "Invalid sig"
 }
 
-export interface Signature{
-   s: bigint;
-   R: ed.RistrettoPoint;
-}
 
 export const verify = (m:Buffer,sig:Signature,publicKey:Buffer)=>{
    const left = ED_BASE.multiply(sig.s);
    const pkHex = new BN(publicKey).toString("hex");
-   const concatBuf = Buffer.concat([m, sig.R.toRawBytes()]);
+   const concatBuf = Buffer.concat([m, Buffer.from(sig.R.toRawBytes())]);
    let hash = blake2bHash("EMIT-SIGN", concatBuf);
    const e = toScalar(hash.slice(0, 32));
    const right = ed.RistrettoPoint.fromHex(pkHex).multiply(e).add(sig.R)  ;//;new BN(mod(mod(toScalar() * e) + sig.R)).toArrayLike(Buffer, "le");

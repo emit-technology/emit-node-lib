@@ -1,6 +1,6 @@
 {
   "name": "@emit-technology/emit-lib",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "EMIT crypto lib for nodejs.",
   "main": "lib/index.js",
   "module": "es/index.js",
