@@ -1,4 +1,5 @@
 import { fromAddressBytes } from "../address";
+var BN = require("bn.js");
 var FactorSerial = /** @class */ (function () {
     function FactorSerial(data) {
         this.data = data;
@@ -17,9 +18,12 @@ var CategorySerial = /** @class */ (function () {
     }
     CategorySerial.prototype.serial = function () {
         var category = this.data;
-        var addrBuf = fromAddressBytes(category.field); //Buffer.from(category.field, "hex");
-        var nameBuf = Buffer.from(category.name, "hex");
-        return Buffer.concat([addrBuf, nameBuf]);
+        var supplierBuf = fromAddressBytes(category.supplier); //Buffer.from(category.field, "hex");
+        var symbolBuf = Buffer.from(category.symbol, "hex");
+        var symbolLenBuf = new BN(symbolBuf.length).toArrayLike(Buffer, "le", 4);
+        var idBuf = Buffer.from(category.id, "hex");
+        var idLenBuf = new BN(idBuf.length).toArrayLike(Buffer, "le", 4);
+        return Buffer.concat([supplierBuf, symbolLenBuf, symbolBuf, idLenBuf, idBuf]);
     };
     return CategorySerial;
 }());

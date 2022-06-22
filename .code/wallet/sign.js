@@ -1,6 +1,6 @@
 import * as ed from "@noble/ed25519";
 import { randomBytes } from "crypto";
-import { ED_BASE } from "./serial/constants";
+import { ED_BASE } from "./serial";
 import { fromAddressBytes } from "./address";
 import BlockSerial from "./serial/block";
 var BN = require("bn.js");

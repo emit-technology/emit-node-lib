@@ -12,7 +12,6 @@ var BlockSerial = /** @class */ (function () {
             var parentHashBuf = Buffer.from(block.parent_hash, "hex"); //32 bytes
             var dataSetBuf = new DataSetsSerial(block.data_sets).serial();
             var factorSetBuf = new FactorSetsSerial(block.factor_set).serial();
-            console.log("block serial >> ", "num", numBuf, "time", timeBuf, "parentHash", parentHashBuf, "dataSetBuf", dataSetBuf, "factorSetBuf", factorSetBuf);
             var bufArr = [
                 numBuf,
                 timeBuf,
@@ -31,7 +30,6 @@ var BlockSerial = /** @class */ (function () {
                 bufArr.push(Buffer.alloc(4, 0).fill(""));
             }
             var r = Buffer.concat(bufArr);
-            console.log(r, "block buffer::");
             return r;
         };
         this.data = data;

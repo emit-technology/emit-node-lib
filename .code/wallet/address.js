@@ -41,13 +41,23 @@ export function fromAddressBytes(addr) {
     }
     var h0 = blake2bHash(EMIT_ADDR_BS_H0, data.slice(0, 33));
     var h0_r = h0.slice(0, 32);
-    var h1 = blake2bHash(EMIT_ADDR_BS_H1, Buffer.concat([h0_r, data.slice(1, 33)]));
+    var h1 = blake2bHash(EMIT_ADDR_BS_H1, Buffer.concat([new Buffer(h0_r), new Buffer(data.slice(1, 33))]));
     var h1_r = h1.slice(0, 32);
     var left = Buffer.from(data.slice(33));
     var right = h1_r.slice(0, 3);
     if (left.toString('hex') != right.toString('hex')) {
         throw new Error("the address bytes sum-check failed");
     }
-    return data.slice(1, 33);
+    return new Buffer(data.slice(1, 33));
+}
+export function checkSumAddress(addr) {
+    try {
+        fromAddressBytes(addr);
+        return true;
+    }
+    catch (e) {
+        console.log(e);
+    }
+    return false;
 }
 //# sourceMappingURL=address.js.map

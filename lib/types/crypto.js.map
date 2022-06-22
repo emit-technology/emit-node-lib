@@ -1,0 +1,1 @@
+{"version":3,"file":"crypto.js","sourceRoot":"","sources":["../../src/types/crypto.ts"],"names":[],"mappings":"","sourcesContent":["import {RistrettoPoint} from \"@noble/ed25519\";\n\nexport interface Signature {\n    s: bigint;\n    R: RistrettoPoint;\n}\n\nexport interface SignEL {\n    r: string\n    s: string\n    v: string\n}"]}
